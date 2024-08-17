@@ -1,7 +1,7 @@
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 import { auth , db} from "./config.js";
 import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
-import { getDocs } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+import { getDocs} from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
 
 
@@ -51,14 +51,47 @@ form.addEventListener("submit" , async (event)=>{
 
 });
 
-const querySnapshot = await getDocs(collection(db, "posts"));
-querySnapshot.forEach((doc) => {
-  console.log(`${doc.id} => ${doc.data()}`);
+let arr = [];
+
+const cardrender = document.querySelector("#card-render");
+
+async function getData(){
+  const querySnapshot = await getDocs(collection(db, "posts"));
+  querySnapshot.forEach((doc) => {
+  console.log(doc.data());
+  arr.push(doc.data());
+
+  function renderData() {
+    cardrender.innerHTML = '';
+    arr.map((item)=>{
+      cardrender.innerHTML += `
+      <div class="card" id="card-render" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">${item.title}</h5>
+          <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
+          <p class="card-text">${item.description}.</p>
+        </div>
+      </div>`
+    })
+  };
+  renderData();
 });
+};
+
+getData();
 
 
-const ul = document.querySelector("#ul");
-const btn = document.querySelector("#publish-btn");
+
+
+
+
+
+
+
+
+
+
+
 
 
 
